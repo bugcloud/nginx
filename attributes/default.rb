@@ -25,16 +25,20 @@ default[:nginx][:version]      = "0.8.54"
 case platform
 when "debian","ubuntu"
   default[:nginx][:dir]        = "/etc/nginx"
-  default[:nginx][:log_dir]    = "/var/log/nginx"
+  default[:nginx][:root_dir]    = "/home/Sites/www"
+  default[:nginx][:log_dir]    = "/home/Sites/log"
   default[:nginx][:user]       = "www-data"
   default[:nginx][:binary]     = "/usr/sbin/nginx"
   default[:nginx][:init_style] = "runit"
+  default[:nginx][:cache_expire] = "1m"
 else
   default[:nginx][:dir]        = "/etc/nginx"
-  default[:nginx][:log_dir]    = "/var/log/nginx"
+  default[:nginx][:root_dir]    = "/home/Sites/www"
+  default[:nginx][:log_dir]    = "/home/Sites/log"
   default[:nginx][:user]       = "www-data"
   default[:nginx][:binary]     = "/usr/sbin/nginx"
   default[:nginx][:init_style] = "init"
+  default[:nginx][:cache_expire] = "1m"
 end
 
 default[:nginx][:gzip] = "on"
@@ -45,12 +49,16 @@ default[:nginx][:gzip_types] = [
   "text/plain",
   "text/html",
   "text/css",
-  "application/x-javascript",
+  "text/javascript",
   "text/xml",
+  "application/x-javascript",
   "application/xml",
   "application/xml+rss",
-  "text/javascript",
   "application/javascript"
+]
+default[:nginx][:gzip_disables] = [
+  "MSIE [1-6]\.",
+  "Mozilla/4"
 ]
 
 default[:nginx][:keepalive]          = "on"

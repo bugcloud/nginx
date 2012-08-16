@@ -33,6 +33,9 @@ http {
   gzip_comp_level <%= node[:nginx][:gzip_comp_level] %>;
   gzip_proxied <%= node[:nginx][:gzip_proxied] %>;
   gzip_types <%= node[:nginx][:gzip_types].join(' ') %>;
+  <% node[:nginx][:gzip_disables].each do |gd| %>
+    gzip_disable "<%= gd %>";
+  <% end %>
   <% end %>
 
   server_names_hash_bucket_size <%= node[:nginx][:server_names_hash_bucket_size] %>;

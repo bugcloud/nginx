@@ -1,11 +1,24 @@
 server {
-  listen   80;
-  server_name  <%= node[:hostname] %>;
+  listen      80;
+  server_name <%= node[:hostname] %>;
+  root        <%= node[:nginx][:root_dir] %>;
+  index       index.html index.htm index.php;
 
-  access_log  <%= node[:nginx][:log_dir] %>/localhost.access.log;
+  access_log  <%= node[:nginx][:log_dir] %>/<%= node[:hostname] %>.access.log;
+  error_log   <%= node[:nginx][:log_dir] %>/<%= node[:hostname] %>.error.log;
+  # http://blog.monoweb.info/article/2012021823.html
+  add_header X-Frame-Options DENY;
+  add_header X-Content-Type-Options nosniff;
 
-  location / {
-    root   /var/www/nginx-default;
-    index  index.html index.htm;
+  location ~ \.php$ {
+    include        <%= node[:nginx][:dir] %>/fastcgi_params;
+    fastcgi_pass   127.0.0.1:9000;
+    fastcgi_index  index.php;
+    fastcgi_param  SCRIPT_FILENAME <%= node[:nginx][:root_dir] %>$fastcgi_script_name;
+  }
+
+  location ~ .*\.(html|htm|jpg|JPG|gif|GIF|png|PNG|swf|SWF|css|CSS|js|JS|inc|INC|ico|ICO) {
+    expires <%= node[:nginx][:cache_expire] %>;
+    break;
   }
 }

@@ -19,6 +19,13 @@
 #
 
 package "nginx"
+package "php5-fpm"
+
+directory node[:nginx][:root_dir] do
+  mode 0755
+  owner node[:nginx][:user]
+  action :create
+end
 
 directory node[:nginx][:log_dir] do
   mode 0755
