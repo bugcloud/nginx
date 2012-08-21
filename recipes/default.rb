@@ -22,6 +22,7 @@ package "nginx"
 package "php5-fpm"
 
 directory node[:nginx][:root_dir] do
+  recursive true
   mode 0755
   owner node[:nginx][:user]
   action :create
